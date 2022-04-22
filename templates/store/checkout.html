@@ -1,0 +1,63 @@
+{% extends 'utils/base.html' %}
+{% block content %}
+<div class="container">
+  <main>
+    <div class="py-5 text-center">
+      <h2>Checkout form</h2>
+    </div>
+    {% comment %} error and success alert message {% endcomment %}
+    {% include 'utils/messages-alert.html' %}
+    <br>
+    <div class="row g-5">
+      <div class="col-md-5 col-lg-4 order-md-last">
+        <h4 class="d-flex justify-content-between align-items-center mb-3">
+          <span class="text-primary">Your cart</span>
+          <span class="badge bg-primary rounded-pill">{{ item.items.count }}</span>
+        </h4>
+        <ul class="list-group mb-3">
+          {% for item in cart %}
+          <li class="list-group-item d-flex justify-content-between lh-sm">
+            <div>
+              <h6 class="my-0">{{ item.item.title }}</h6>
+              <small class="text-muted">{{ item.items.description|slice:'-100' }}</small>
+            </div>
+            <span class="text-muted">${{ item.get_subtotal }}</span>
+          </li>
+          {% endfor %}
+          <li class="list-group-item d-flex justify-content-between">
+            <span>Total (USD)</span>
+            <strong>${{ items.get_totalprice }}</strong>
+          </li>
+        </ul>
+      </div>
+      <div class="col-md-7 col-lg-8">
+        <form class="needs-validation" action="{% url 'checkout' %}" method="post">
+          {% csrf_token %}
+          <div class="row g-3">
+            {% comment %} error and success alert message {% endcomment %}
+            {% include 'utils/messages-alert.html' %}
+          </div>
+
+          <h4 class="mb-3">Payment</h4>
+
+          <div class="my-3">
+            <div class="form-check">
+              <input id="credit" name="paymentMethod" type="radio" class="form-check-input" checked>
+              <label class="form-check-label" for="credit">Pay On Delivery</label>
+            </div>
+            <div class="form-check">
+              <input id="debit" name="paymentMethod" type="radio" class="form-check-input" >
+              <label class="form-check-label" for="debit">Pay Online</label>
+            </div>
+          </div>
+
+
+          <hr class="my-4">
+          <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button>
+        </form>
+        <br><br>
+      </div>
+    </div>
+  </main>
+</div>
+{% endblock %}

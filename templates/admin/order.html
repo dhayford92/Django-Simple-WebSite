@@ -1,0 +1,46 @@
+{% extends 'utils/adminbase.html' %}
+{% block content %}
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Orders</h1>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-striped table-sm">
+          <thead>
+            <tr>
+              <th scope="col">#ID</th>
+              <th scope="col">Items</th>
+              <th scope="col">Customer</th>
+              <th scope="col">Amount</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for data in orders %} <!-- run loop through the order data -->
+            <tr>
+              <td>{{ data.pk }}</td>
+              <td>{{ data.items.count }}</td>
+              <td>{{ data.user.username }}</td>
+              <td>{{ data.total }}</td>
+              {% if data.is_payed %} <!-- Check if order is payed -->
+              <td>Payed</td>
+              {% elif data.is_cancelled %} <!-- Check if order is cancelled -->
+              <td>cancelled</td>
+              {% else %} <!-- Check if order is non of the above show panding -->
+              <td>Not yet payed</td>
+              {% endif %}
+              {% if data.is_accepted %} <!-- Check if order is accepted -->
+              <td>Order Accepted </td>
+              {% elif data.is_cancelled %} <!-- Check if order is cancelled -->
+              <td>Order Cancelled </td>
+              {% else %} <!-- Check if order is non of the above show buttons -->
+              <td><a href="{% url 'accept' data.pk %}" class="btn btn-success">Accept</a></td> 
+              <td><a href="{% url 'cancelled' data.pk %}" class="btn btn-danger">cancelled</a></td>
+              {% endif %}
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </main>
+{% endblock %}

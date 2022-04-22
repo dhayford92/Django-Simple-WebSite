@@ -1,0 +1,45 @@
+{% extends 'utils/base.html' %}
+{% block content %}
+
+<div class="bcon">
+    <div class="Cart-Container">
+        {% comment %} error and success alert message {% endcomment %}
+        {% include 'utils/messages-alert.html' %}
+        <div class="Header">
+            <h3 class="Header">Shopping Cart</h3>
+            <a href="{% url 'home' %}"><h5 class="Action">Shop For More</h5></a>
+        </div>
+        {% if empty %}
+            <h1>{{ empty_message }}</h1>
+            <a href="{% url 'home' %}" class="btn btn-black btn-outline-black float-right ml-2 rounded-1">Start shopping</a>
+          {% else %}
+        {% for item in cart %}
+            <div class="Cart-Items">
+                <div class="about">
+                    <h1 class="title">{{ item.item.title  }}</h1>
+                </div>
+                <div class="prices">
+                    <div class="count">Qty: {{ item.quantity }}</div>
+                </div>
+                <div class="prices">
+                    <div class="amount">${{ item.get_subtotal }}</div>
+                    <a href="{% url 'from-cart' item.item.pk %}" class="remove"><u>Remove</u></a>
+                </div>
+            </div>
+        {% endfor %}
+            <hr> 
+            <div class="checkout">
+                <div class="total">
+                <div>
+                <div class="Subtotal">Sub-Total</div>
+                <div class="items">{{ items.items.count }} items</div>
+                </div>
+                <div class="total-amount">${{ items.get_totalprice }}</div>
+                </div>
+                <a href="{% url 'checkout' %}"><button  class="button-cart">Checkout</button></a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+<br><br>
+{% endblock %}
